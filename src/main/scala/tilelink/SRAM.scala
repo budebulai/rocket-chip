@@ -6,6 +6,7 @@ import Chisel._
 import chisel3.experimental.chiselName
 import freechips.rocketchip.config.Parameters
 import freechips.rocketchip.diplomacy._
+import freechips.rocketchip.diplomaticobjectmodel.model.OMMemoryType
 import freechips.rocketchip.util._
 
 class TLRAM(
@@ -42,6 +43,8 @@ class TLRAM(
     val lanes = beatBytes/eccBytes
     val addrBits = (mask zip edge.addr_hi(in.a.bits).toBools).filter(_._1).map(_._2)
     val mem = makeSinglePortedByteWriteSeqMem(1 << addrBits.size, lanes, width)
+    val size = 1 << addrBits.size
+    def sramInfo(): (Int, Int, Int) = (size, lanes, width)
 
     /* This block uses a two-stage pipeline; A=>D
      * Both stages vie for access to the single SRAM port.

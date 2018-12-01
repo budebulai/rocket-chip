@@ -2,6 +2,13 @@
 
 package freechips.rocketchip.diplomaticobjectmodel.model
 
+sealed trait OMMemoryType extends OMBaseType
+
+case object LIM extends OMMemoryType
+case object TIM extends OMMemoryType
+case object ICACHE extends OMMemoryType
+case object DCACHE extends OMMemoryType
+
 case class OMMemory(
   description: String,
   addressWidth: Int,
@@ -9,5 +16,6 @@ case class OMMemory(
   depth: Int,
   writeMaskGranularity: Int,
   rtlModule: OMRTLModule,
-  _types: Seq[String] = Seq("OMMemory")
-)
+  omMemoryType: Option[OMMemoryType] = None,
+  _types: Seq[String] = Seq("OMMemory", "OMComponent")
+)  extends OMComponent

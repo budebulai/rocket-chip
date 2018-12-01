@@ -100,9 +100,13 @@ class OMEnumSerializer extends CustomSerializer[OMEnum](format => {
 
 object DiplomaticObjectModelAddressing {
 
-  def getOMComponentHelper(device: Device, resourceBindingsMap: ResourceBindingsMap, fn: (ResourceBindings) => Seq[OMComponent]): Seq[OMComponent] = {
+  def getResourceBindings(device: Device, resourceBindingsMap: ResourceBindingsMap): Option[ResourceBindings] = {
     require(resourceBindingsMap.map.contains(device))
-    val resourceBindings = resourceBindingsMap.map.get(device)
+    resourceBindingsMap.map.get(device)
+  }
+
+  def getOMComponentHelper(device: Device, resourceBindingsMap: ResourceBindingsMap, fn: (ResourceBindings) => Seq[OMComponent]): Seq[OMComponent] = {
+    val resourceBindings = getResourceBindings(device, resourceBindingsMap)
     resourceBindings.map { case rb => fn(rb) }.getOrElse(Nil)
   }
 
